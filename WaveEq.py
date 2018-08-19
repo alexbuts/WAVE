@@ -112,7 +112,7 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
         X = np.arange(0, self.X, self.X /count)
         Y = np.arange(0, self.T, self.T / count)
         X, Y = np.meshgrid(X, Y)
-        Z = np.array([np.array([self.Solution(i,0, j) for i in np.arange(0, self.X, 0.05)]) for j in np.arange(0, self.T, 0.1)])
+        Z = np.array([np.array([self.Solution(i,0, j) for i in np.arange(0, self.X, self.X /count)]) for j in np.arange(0, self.T,  self.T / count)])
         fig = plt.figure()
         ax = Axes3D(fig)
         ax.set_xlabel("X Axis")
@@ -122,7 +122,7 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
         X = np.arange(0, self.Y, self.Y / count)
         Y = np.arange(0, self.T, self.T /count)
         X, Y = np.meshgrid(X, Y)
-        Z = np.array([np.array([self.Solution(0,i, j) for i in np.arange(0, self.Y, 0.1)]) for j in np.arange(0, self.T, 0.1)])
+        Z = np.array([np.array([self.Solution(0,i, j) for i in np.arange(0, self.Y, self.Y / count)]) for j in np.arange(0, self.T, self.T /count)])
         fig = plt.figure()
         ax = Axes3D(fig)
         ax.set_xlabel("Y Axis")
@@ -131,8 +131,6 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
 if __name__=="__main__":
     a=PDE(0.25,1,2,2)
     a.setNetandWeights(0.2,0.4,0.4,0.5)
-    a.XoTPr(20)
-    a.YoTPr(20)
+    a.XoTPr(30)
+    a.YoTPr(30)
     plt.show()
-
-
