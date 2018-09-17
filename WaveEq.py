@@ -5,20 +5,22 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from math import sin,cos,exp
 import numpy as np
-class MixCond():
+
+class MixCond():#Mixin of equation conditions
     @staticmethod
     def phi(t):#neiman du(T,t)/dn=2t T-boundaries of rectangle
         return 2*t
     @staticmethod
-    def f(x,y,t):
+    def f(x,y,t): #sourse function
         return exp(t)*sin(x)*sin(y)
     @staticmethod
-    def g1(x,y):#u(0,x)=g1(x)
+    def g1(x,y):#u(0,x)=g1(x); starting condition
         return cos(x)*cos(y)
     @staticmethod
-    def g2(x,y):#du(0,x)/dt=g2(x)
+    def g2(x,y):#du(0,x)/dt=g2(x); starting condition for derivative
         return sin(x)*cos(y)
-class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
+
+class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);object of our Partial Differentional Equation
     def __init__(self,_v,_x,_y,_t):#choose speed, rectangle [0;X]x[0;Y] and period of time T
         self.T=_t
         self.X=_x
@@ -43,7 +45,7 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
         self.Net["Ylist"] = points(self.Y,h2)
         self.Net["Timelist"] = points(self.T,t0)
         self.Net["weight"] = wg
-    def Solution(self,_x,_y,t):
+    def Solution(self,_x,_y,t):#method for finding value of function
         H1,H2,T0,Wgh=self.Net["stepX"],self.Net["stepY"],self.Net["stepTime"],self.Net["weight"]
         Xc,Yc,Tc=self.Net["Xlist"],self.Net["Ylist"],self.Net["Timelist"]
         u=[]#index for SLAE
@@ -108,7 +110,7 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
         A=csr_matrix(A)
         res=spsolve(A,np.array(b))#solve system and finding nodes
         return np.float64(interpolate.griddata(u,res,(_x,_y,t)))#interpolation
-    def XoTPr(self,count):
+    def XoTPr(self,count):# proection on X axis and Time
         X = np.arange(0, self.X, self.X /count)
         Y = np.arange(0, self.T, self.T / count)
         X, Y = np.meshgrid(X, Y)
@@ -118,7 +120,7 @@ class PDE(MixCond):#d2u/dt2=v*(d2u/dx2+d2u/dy2)+f(x,y,t);
         ax.set_xlabel("X Axis")
         ax.set_ylabel("T Axis")
         ax.plot_surface(X, Y,Z)
-    def YoTPr(self,count):
+    def YoTPr(self,count):# proection on Y axis and Time
         X = np.arange(0, self.Y, self.Y / count)
         Y = np.arange(0, self.T, self.T /count)
         X, Y = np.meshgrid(X, Y)
